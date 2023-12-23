@@ -1,0 +1,18 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+    application:
+        name: taskFlow
+    jpa:
+      generate-ddl: true
+      show-sql: true
+      hibernate:
+            ddl-auto: create-drop
+    datasource:
+        url: jdbc:postgresql://localhost:5432/taskflow
+        username: postgres
+        password: root
+        driver-class-name: org.postgresql.Driver
