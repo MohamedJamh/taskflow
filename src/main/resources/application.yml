@@ -16,3 +16,6 @@ spring:
         username: postgres
         password: root
         driver-class-name: org.postgresql.Driver
+jwt:
+    signing:
+        key: p5eHhtsr9qvSTaybbxGgYkhvnT7PYcqCxi6tNUEyXvQ=
