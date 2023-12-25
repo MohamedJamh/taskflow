@@ -6,6 +6,7 @@ import com.taskflow.utils.ErrorMessage;
 import com.taskflow.utils.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,9 +21,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response<List<ErrorMessage>>> inputValidationException(MethodArgumentNotValidException ex) {
         List<ErrorMessage> errorMessages = new ArrayList<>();
         Response<List<ErrorMessage>> response = new Response<>();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
             String errorMessage = error.getDefaultMessage();
-            ErrorMessage errorMessageObj = ErrorMessage.builder().message(errorMessage).build();
+            String errorField = error.getField();
+            ErrorMessage errorMessageObj = ErrorMessage.builder()
+                    .field(errorField)
+                    .message(errorMessage).build();
             errorMessages.add(errorMessageObj);
         });
         response.setMessage("Validation error");
@@ -32,8 +36,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
-
-
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response<ErrorMessage>> inputValidationException(ValidationException ex) {
@@ -50,6 +52,25 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response<String>> inputValidationException(BadRequestException ex) {
         Response<String> response = new Response<>();
         response.setMessage(ex.getMessage());
+        response.setErrors(null);
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response<String>> userNotFound(UsernameNotFoundException ex) {
+        Response<String> response = new Response<>();
+        response.setMessage("User not found");
+        response.setErrors(
+                List.of(
+                    ErrorMessage.builder()
+                            .field("email")
+                            .message("User with associated email not found")
+                            .build()
+                )
+        );
         return new ResponseEntity<>(
                 response,
                 HttpStatus.BAD_REQUEST
