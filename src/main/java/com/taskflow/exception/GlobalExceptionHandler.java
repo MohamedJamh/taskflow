@@ -1,11 +1,13 @@
 package com.taskflow.exception;
 
-import com.taskflow.exception.CustomExceptions.BadRequestException;
-import com.taskflow.exception.CustomExceptions.ValidationException;
+import com.taskflow.exception.customexceptions.BadRequestException;
+import com.taskflow.exception.customexceptions.ValidationException;
 import com.taskflow.utils.ErrorMessage;
 import com.taskflow.utils.Response;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -74,6 +76,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 response,
                 HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response<String>> badCredentials(BadCredentialsException ex) {
+        Response<String> response = new Response<>();
+        response.setMessage("Invalid email or password");
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Response<String>> unauthorized(ExpiredJwtException ex) {
+        Response<String> response = new Response<>();
+        response.setMessage("Expired token");
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.UNAUTHORIZED
         );
     }
 }

@@ -1,17 +1,15 @@
 package com.taskflow.service.impl;
 
-import com.taskflow.domain.dto.request.SignUpRequestDto;
-import com.taskflow.domain.dto.request.SigninRequestDto;
 import com.taskflow.domain.dto.response.JwtAuthenticationResponseDto;
 import com.taskflow.domain.entity.User;
-import com.taskflow.domain.enums.Role;
-import com.taskflow.exception.CustomExceptions.BadRequestException;
-import com.taskflow.exception.CustomExceptions.ValidationException;
+import com.taskflow.exception.customexceptions.BadRequestException;
+import com.taskflow.exception.customexceptions.ValidationException;
 import com.taskflow.repository.UserRepository;
 import com.taskflow.service.AuthenticationService;
 import com.taskflow.service.JwtService;
 import com.taskflow.utils.ErrorMessage;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -32,14 +30,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
     @Override
     public JwtAuthenticationResponseDto signup(User user) throws ValidationException {
-        // this logic to controller
-        /*
-        var user = User.builder()
-                .firstName(signUpRequestDto.getFirstName())
-                .lastName(signUpRequestDto.getLastName())
-                .email(signUpRequestDto.getEmail())
-                .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
-                .role(Role.USER).build();*/
         if(userRepository.findByEmail(user.getEmail()).isPresent())
             throw new ValidationException(
                     List.of(
@@ -60,10 +50,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public JwtAuthenticationResponseDto signin(User user) throws BadRequestException {
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        var optionalUser = userRepository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new BadRequestException("Invalid email or password"));
-        var jwt = jwtService.generateToken(optionalUser);
+                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+        );
+        var optionalUser = userRepository.findByEmail(user.getEmail());
+        if(optionalUser.isEmpty())
+            throw new BadCredentialsException("Invalid email or password");
+        var jwt = jwtService.generateToken(optionalUser.get());
         return JwtAuthenticationResponseDto.builder()
                 .token(jwt).build();
     }

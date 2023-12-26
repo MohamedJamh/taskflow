@@ -5,17 +5,22 @@ server:
     include-binding-errors: always
 spring:
     application:
-        name: taskFlow
+      name: taskFlow
     jpa:
       generate-ddl: true
       show-sql: true
       hibernate:
-            ddl-auto: create-drop
+            ddl-auto: update
     datasource:
         url: jdbc:postgresql://localhost:5432/taskflow
         username: postgres
         password: root
         driver-class-name: org.postgresql.Driver
-jwt:
+token:
     signing:
         key: p5eHhtsr9qvSTaybbxGgYkhvnT7PYcqCxi6tNUEyXvQ=
+logging:
+  level:
+    org:
+      springframework:
+        web: trace
