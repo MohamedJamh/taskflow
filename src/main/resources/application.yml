@@ -10,13 +10,17 @@ spring:
       generate-ddl: true
       show-sql: true
       hibernate:
-            ddl-auto: update
+            ddl-auto: create
     datasource:
         url: jdbc:postgresql://localhost:5432/taskflow
         username: postgres
         password: root
         driver-class-name: org.postgresql.Driver
-token:
+jwt:
+    access:
+        expirationInMs: 1440000 # 24 minutes
+    refresh:
+        expirationInMonths: 1
     signing:
         key: p5eHhtsr9qvSTaybbxGgYkhvnT7PYcqCxi6tNUEyXvQ=
 logging:

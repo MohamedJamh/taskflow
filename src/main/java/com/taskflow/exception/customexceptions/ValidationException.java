@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @Setter
 public class ValidationException extends Exception {
-    private final transient List<ErrorMessage> errors;
+    private final List<ErrorMessage> errors;
 }

@@ -1,10 +1,10 @@
 package com.taskflow.exception;
 
 import com.taskflow.exception.customexceptions.BadRequestException;
+import com.taskflow.exception.customexceptions.InValidRefreshTokenException;
 import com.taskflow.exception.customexceptions.ValidationException;
 import com.taskflow.utils.ErrorMessage;
 import com.taskflow.utils.Response;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -49,17 +49,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Response<String>> inputValidationException(BadRequestException ex) {
-        Response<String> response = new Response<>();
-        response.setMessage(ex.getMessage());
-        response.setErrors(null);
-        return new ResponseEntity<>(
-                response,
-                HttpStatus.BAD_REQUEST
-        );
-    }
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response<String>> userNotFound(UsernameNotFoundException ex) {
@@ -89,14 +78,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
-    @ExceptionHandler(ExpiredJwtException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Response<String>> unauthorized(ExpiredJwtException ex) {
+    @ExceptionHandler({
+        BadRequestException.class,
+        InValidRefreshTokenException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response<String>> abstractBadRequest(Exception ex) {
         Response<String> response = new Response<>();
-        response.setMessage("Expired token");
+        response.setMessage(ex.getMessage());
         return new ResponseEntity<>(
                 response,
-                HttpStatus.UNAUTHORIZED
+                HttpStatus.BAD_REQUEST
         );
     }
 }
