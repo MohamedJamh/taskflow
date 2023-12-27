@@ -39,11 +39,11 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -118,6 +118,7 @@
 				</configuration>
 			</plugin>
 
+<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -140,7 +141,7 @@
 							<artifactId>lombok-mapstruct-binding</artifactId>
 							<version>0.2.0</version>
 						</path>
-						<!-- other annotation processors -->
+						&lt;!&ndash; other annotation processors &ndash;&gt;
 					</annotationProcessorPaths>
 					<compilerArgs>
 						<compilerArg>
@@ -149,6 +150,7 @@
 					</compilerArgs>
 				</configuration>
 			</plugin>
+-->
 
 		</plugins>
 	</build>

@@ -1,14 +1,17 @@
 package com.taskflow.domain.entity;
 
-import com.taskflow.domain.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -25,12 +28,46 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(
+                    name = "user_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id"
+            )
+    )
+    private Set<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_group",
+            joinColumns = @JoinColumn(
+                    name = "user_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "group_id"
+            )
+    )
+    private Set<PermissionGroup> permissionGroups;
 
     @Override
+    //@Transactional
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(
+            role ->{
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+                role.getPermissions().forEach(
+                        permission -> authorities.add(
+                                new SimpleGrantedAuthority(permission.getSubject() + ":" + permission.getAction())
+                        )
+                );
+            }
+        );
+        return authorities;
     }
 
     @Override

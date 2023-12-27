@@ -7,7 +7,7 @@ import com.taskflow.domain.dto.response.JwtAuthenticationResponseDto;
 import com.taskflow.domain.dto.response.RefreshTokenResponseDTO;
 import com.taskflow.domain.entity.RefreshToken;
 import com.taskflow.domain.entity.User;
-import com.taskflow.domain.enums.Role;
+import com.taskflow.domain.entity.Role;
 import com.taskflow.exception.customexceptions.BadRequestException;
 import com.taskflow.exception.customexceptions.InValidRefreshTokenException;
 import com.taskflow.exception.customexceptions.ValidationException;
@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -47,12 +49,13 @@ public class AuthRest {
         Response<JwtAuthenticationResponseDto> response = new Response<>();
         String jwtToken;
         String refreshToken;
+        //TODO: use mapper here
         User user = User.builder()
                 .firstName(signUpRequestDto.getFirstName())
                 .lastName(signUpRequestDto.getLastName())
                 .email(signUpRequestDto.getEmail())
                 .password(signUpRequestDto.getPassword())
-                .role(Role.USER).build();
+                .build();
         jwtToken = authenticationService.signup(user);
         refreshToken = refreshTokenService.createRefreshToken(user.getEmail())
                 .getToken();

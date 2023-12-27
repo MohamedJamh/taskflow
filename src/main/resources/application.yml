@@ -10,7 +10,7 @@ spring:
       generate-ddl: true
       show-sql: true
       hibernate:
-            ddl-auto: create
+            ddl-auto: create-drop
     datasource:
         url: jdbc:postgresql://localhost:5432/taskflow
         username: postgres
@@ -23,6 +23,10 @@ jwt:
         expirationInMonths: 1
     signing:
         key: p5eHhtsr9qvSTaybbxGgYkhvnT7PYcqCxi6tNUEyXvQ=
+seeder:
+    enabled: true
+    user:
+          password: 1234
 logging:
   level:
     org:

@@ -9,4 +9,5 @@ import lombok.*;
 public class JwtAuthenticationResponseDto {
     private String accessToken;
     private String refreshToken;
+    private UserResponseDto user;
 }
