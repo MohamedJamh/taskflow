@@ -19,9 +19,6 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    /*@ManyToMany(mappedBy = "roles")
-    private Set<User> users;*/
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "role_permission",

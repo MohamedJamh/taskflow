@@ -26,7 +26,7 @@ jwt:
 seeder:
     enabled: true
     user:
-          password: 1234
+        password: 1234
 logging:
   level:
     org:

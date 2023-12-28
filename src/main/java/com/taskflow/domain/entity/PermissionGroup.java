@@ -22,10 +22,7 @@ public class PermissionGroup {
     @Column(nullable = true)
     private LocalDateTime deadline;
 
-    /*@ManyToMany(mappedBy = "permissionGroups")
-    private Set<User> users;*/
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "group_permission",
             joinColumns = @JoinColumn(

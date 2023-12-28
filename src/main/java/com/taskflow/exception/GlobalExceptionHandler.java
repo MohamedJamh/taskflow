@@ -7,6 +7,7 @@ import com.taskflow.utils.ErrorMessage;
 import com.taskflow.utils.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -80,7 +81,8 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler({
         BadRequestException.class,
-        InValidRefreshTokenException.class
+        InValidRefreshTokenException.class,
+        AccessDeniedException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response<String>> abstractBadRequest(Exception ex) {

@@ -1,16 +1,13 @@
 package com.taskflow.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +20,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -31,30 +28,29 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(
-                    name = "user_id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id"
-            )
+        name = "user_role",
+        joinColumns = @JoinColumn(
+                name = "user_id"
+        ),
+        inverseJoinColumns = @JoinColumn(
+                name = "role_id"
+        )
     )
-    private Set<Role> roles;
+    private transient Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_group",
-            joinColumns = @JoinColumn(
-                    name = "user_id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "group_id"
-            )
+        name = "user_group",
+        joinColumns = @JoinColumn(
+                name = "user_id"
+        ),
+        inverseJoinColumns = @JoinColumn(
+                name = "group_id"
+        )
     )
-    private Set<PermissionGroup> permissionGroups;
+    private transient Set<PermissionGroup> permissionGroups;
 
     @Override
-    //@Transactional
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         roles.forEach(
