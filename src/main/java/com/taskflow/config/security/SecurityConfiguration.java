@@ -2,7 +2,6 @@ package com.taskflow.config.security;
 
 import com.taskflow.config.filter.JwtAuthenticationFilter;
 import com.taskflow.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,10 +25,12 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
+    private final AuthEntryPoint authEntryPoint;
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, UserService userService) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userService = userService;
+        this.authEntryPoint = new AuthEntryPoint();
     }
 
     @Bean
@@ -41,8 +42,8 @@ public class SecurityConfiguration {
             .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
             .authenticationProvider(authenticationProvider()).addFilterBefore(
                     jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class
-            );
-
+            )
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint));
         return http.build();
     }
 

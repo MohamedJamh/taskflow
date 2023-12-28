@@ -53,16 +53,18 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(
-            role ->{
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
-                role.getPermissions().forEach(
-                        permission -> authorities.add(
-                                new SimpleGrantedAuthority(permission.getSubject() + ":" + permission.getAction())
-                        )
-                );
-            }
-        );
+        if(roles != null){
+            roles.forEach(
+                role ->{
+                    authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+                    role.getPermissions().forEach(
+                            permission -> authorities.add(
+                                    new SimpleGrantedAuthority(permission.getSubject() + ":" + permission.getAction())
+                            )
+                    );
+                }
+            );
+        }
         return authorities;
     }
 

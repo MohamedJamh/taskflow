@@ -82,7 +82,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         BadRequestException.class,
         InValidRefreshTokenException.class,
-        AccessDeniedException.class
+        AccessDeniedException.class,
+        Exception.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response<String>> abstractBadRequest(Exception ex) {
