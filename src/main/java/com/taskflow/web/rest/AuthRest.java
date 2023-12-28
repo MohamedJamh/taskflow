@@ -1,13 +1,13 @@
 package com.taskflow.web.rest;
 
-import com.taskflow.domain.dto.request.RefreshTokenRequestDto;
-import com.taskflow.domain.dto.request.SignUpRequestDto;
-import com.taskflow.domain.dto.request.SigninRequestDto;
-import com.taskflow.domain.dto.response.JwtAuthenticationResponseDto;
-import com.taskflow.domain.dto.response.RefreshTokenResponseDTO;
+import com.taskflow.domain.dto.request.auth.SigninRequestDto;
+import com.taskflow.domain.dto.request.jwt.RefreshTokenRequestDto;
+import com.taskflow.domain.dto.request.user.UserRequestDto;
+import com.taskflow.domain.dto.response.auth.JwtAuthenticationResponseDto;
+import com.taskflow.domain.dto.response.jwt.RefreshTokenResponseDTO;
 import com.taskflow.domain.entity.RefreshToken;
 import com.taskflow.domain.entity.User;
-import com.taskflow.domain.entity.Role;
+import com.taskflow.domain.mapper.UserMapper;
 import com.taskflow.exception.customexceptions.BadRequestException;
 import com.taskflow.exception.customexceptions.InValidRefreshTokenException;
 import com.taskflow.exception.customexceptions.ValidationException;
@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -36,26 +34,28 @@ public class AuthRest {
     private final RefreshTokenService refreshTokenService;
     private JwtService jwtService;
     private UserService userService;
+    private UserMapper userMapper;
 
-    public AuthRest(AuthenticationService authenticationService, RefreshTokenService refreshTokenService, JwtService jwtService, UserService userService) {
+    public AuthRest(
+            AuthenticationService authenticationService,
+            RefreshTokenService refreshTokenService,
+            JwtService jwtService,
+            UserService userService,
+            UserMapper userMapper
+    ) {
         this.authenticationService = authenticationService;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Response<JwtAuthenticationResponseDto>> signup(@RequestBody @Valid SignUpRequestDto signUpRequestDto) throws ValidationException {
+    public ResponseEntity<Response<JwtAuthenticationResponseDto>> signup(@RequestBody @Valid UserRequestDto userRequestDto) throws ValidationException {
         Response<JwtAuthenticationResponseDto> response = new Response<>();
         String jwtToken;
         String refreshToken;
-        //TODO: use mapper here
-        User user = User.builder()
-                .firstName(signUpRequestDto.getFirstName())
-                .lastName(signUpRequestDto.getLastName())
-                .email(signUpRequestDto.getEmail())
-                .password(signUpRequestDto.getPassword())
-                .build();
+        User user = userMapper.toUser(userRequestDto);
         jwtToken = authenticationService.signup(user);
         refreshToken = refreshTokenService.createRefreshToken(user.getEmail())
                 .getToken();

@@ -1,5 +1,6 @@
-package com.taskflow.domain.dto.response;
+package com.taskflow.domain.dto.response.auth;
 
+import com.taskflow.domain.dto.response.user.UserResponseDto;
 import lombok.*;
 @Builder
 @NoArgsConstructor

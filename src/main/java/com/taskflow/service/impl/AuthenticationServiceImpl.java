@@ -1,6 +1,5 @@
 package com.taskflow.service.impl;
 
-import com.taskflow.domain.entity.Role;
 import com.taskflow.domain.entity.User;
 import com.taskflow.exception.customexceptions.BadRequestException;
 import com.taskflow.exception.customexceptions.ValidationException;
@@ -9,6 +8,7 @@ import com.taskflow.repository.UserRepository;
 import com.taskflow.service.AuthenticationService;
 import com.taskflow.service.JwtService;
 import com.taskflow.utils.ErrorMessage;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,29 +17,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Component
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthenticationServiceImpl(
             UserRepository userRepository,
+            @Qualifier("bcryptPasswordEncoder")
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             AuthenticationManager authenticationManager,
             RoleRepository roleRepository
     ) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     @Transactional

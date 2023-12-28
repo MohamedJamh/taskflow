@@ -2,6 +2,7 @@ package com.taskflow.config.security;
 
 import com.taskflow.config.filter.JwtAuthenticationFilter;
 import com.taskflow.service.UserService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +49,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    @Qualifier("bcryptPasswordEncoder")
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

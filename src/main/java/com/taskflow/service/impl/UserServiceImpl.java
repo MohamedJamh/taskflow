@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(
+            UserRepository userRepository
+    ) {
         this.userRepository = userRepository;
     }
 

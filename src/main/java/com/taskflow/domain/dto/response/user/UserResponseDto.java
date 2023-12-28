@@ -1,6 +1,9 @@
-package com.taskflow.domain.dto.response;
+package com.taskflow.domain.dto.response.user;
 
+import com.taskflow.domain.dto.response.role.RoleResponseDto;
 import lombok.*;
+
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -12,5 +15,5 @@ public class UserResponseDto {
     private String email;
     private String firstName;
     private String lastName;
-    private String role;
+    private Set<RoleResponseDto> roles;
 }
