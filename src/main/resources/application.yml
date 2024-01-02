@@ -7,10 +7,17 @@ spring:
     application:
       name: taskFlow
     jpa:
-      generate-ddl: true
-      show-sql: true
       hibernate:
-            ddl-auto: create-drop
+        ddl-auto: none # not working !
+      properties:
+        # temporarily solution to prevent hibernate from creating tables , (ddl-auto: none) will not work
+        hibernate:
+          hbm2ddl:
+            auto: none
+        # ----------------------
+          show_sql: true
+          format_sql: true
+          use_sql_comments: true
     datasource:
         url: jdbc:postgresql://localhost:5432/taskflow
         username: postgres
@@ -24,7 +31,7 @@ jwt:
     signing:
         key: p5eHhtsr9qvSTaybbxGgYkhvnT7PYcqCxi6tNUEyXvQ=
 seeder:
-    enabled: true
+    enabled: false
     user:
         password: 1234
 logging:
@@ -32,3 +39,4 @@ logging:
     org:
       springframework:
         web: trace
+    liquibase: trace
