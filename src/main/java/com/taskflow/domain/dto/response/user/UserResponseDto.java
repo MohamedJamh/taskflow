@@ -11,7 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserResponseDto {
-    private String id;
+    private Long id;
     private String email;
     private String firstName;
     private String lastName;

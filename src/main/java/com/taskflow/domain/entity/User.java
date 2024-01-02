@@ -65,6 +65,16 @@ public class User implements UserDetails {
                 }
             );
         }
+        if(permissionGroups != null){
+            permissionGroups.forEach(
+                permissionGroup ->
+                    permissionGroup.getPermissions().forEach(
+                            permission -> authorities.add(
+                                    new SimpleGrantedAuthority(permission.getSubject() + ":" + permission.getAction())
+                            )
+                    )
+            );
+        }
         return authorities;
     }
 

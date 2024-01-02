@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 @Service
 public interface RefreshTokenService {
-    RefreshToken createRefreshToken(String email) throws UsernameNotFoundException;
+    RefreshToken getOrCreateRefreshToken(String email) throws UsernameNotFoundException;
     Optional<RefreshToken> findByToken(String token);
     RefreshToken verifyExpiration(RefreshToken token) throws InValidRefreshTokenException;
     void throwInValidRefreshTokenException(String message) throws InValidRefreshTokenException;

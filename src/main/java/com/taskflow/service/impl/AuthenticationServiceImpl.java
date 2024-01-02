@@ -1,5 +1,6 @@
 package com.taskflow.service.impl;
 
+import com.taskflow.domain.dto.response.auth.JwtAuthenticationResponseDto;
 import com.taskflow.domain.entity.User;
 import com.taskflow.exception.customexceptions.BadRequestException;
 import com.taskflow.exception.customexceptions.ValidationException;
@@ -43,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
     @Override
     @Transactional
-    public String signup(User user) throws ValidationException {
+    public JwtAuthenticationResponseDto signup(User user) throws ValidationException {
         if(userRepository.findByEmail(user.getEmail()).isPresent())
             throw new ValidationException(
                     List.of(
@@ -56,11 +57,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         roleRepository.findByName("USER").ifPresent(role -> user.setRoles(Set.of(role)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return jwtService.generateToken(user);
+        return JwtAuthenticationResponseDto.builder()
+                .accessToken(jwtService.generateToken(user))
+                .build();
     }
 
     @Override
-    public String signin(User user) throws BadRequestException {
+    public JwtAuthenticationResponseDto signin(User user) throws BadRequestException {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
@@ -68,6 +71,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var optionalUser = userRepository.findByEmail(user.getEmail());
         if(optionalUser.isEmpty())
             throw new BadCredentialsException("Invalid email or password");
-        return jwtService.generateToken(optionalUser.get());
+        return JwtAuthenticationResponseDto.builder()
+                .accessToken(jwtService.generateToken(user))
+                .build();
     }
 }

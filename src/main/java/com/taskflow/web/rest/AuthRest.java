@@ -53,37 +53,29 @@ public class AuthRest {
     @PostMapping("/signup")
     public ResponseEntity<Response<JwtAuthenticationResponseDto>> signup(@RequestBody @Valid UserRequestDto userRequestDto) throws ValidationException {
         Response<JwtAuthenticationResponseDto> response = new Response<>();
-        String jwtToken;
-        String refreshToken;
         User user = userMapper.toUser(userRequestDto);
-        jwtToken = authenticationService.signup(user);
-        refreshToken = refreshTokenService.createRefreshToken(user.getEmail())
-                .getToken();
-        response.setResult(JwtAuthenticationResponseDto.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build()
+        JwtAuthenticationResponseDto jwtAuthenticationResponseDto = authenticationService.signup(user);
+        jwtAuthenticationResponseDto.setRefreshToken(
+                refreshTokenService.getOrCreateRefreshToken(user.getEmail())
+                .getToken()
         );
+        response.setResult(jwtAuthenticationResponseDto);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/signin")
     public ResponseEntity<Response<JwtAuthenticationResponseDto>> signin(@RequestBody @Valid SigninRequestDto signinRequestDto) throws BadRequestException {
         Response<JwtAuthenticationResponseDto> response = new Response<>();
-        String jwtToken;
-        String refreshToken;
         User user = User.builder()
                 .email(signinRequestDto.getEmail())
                 .password(signinRequestDto.getPassword())
                 .build();
-        jwtToken = authenticationService.signin(user);
-        refreshToken = refreshTokenService.createRefreshToken(user.getEmail())
-                .getToken();
-        response.setResult(JwtAuthenticationResponseDto.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build()
+        JwtAuthenticationResponseDto jwtAuthenticationResponseDto =  authenticationService.signin(user);
+        jwtAuthenticationResponseDto.setRefreshToken(
+                refreshTokenService.getOrCreateRefreshToken(user.getEmail())
+                        .getToken()
         );
+        response.setResult(jwtAuthenticationResponseDto);
         return ResponseEntity.ok().body(response);
     }
 
