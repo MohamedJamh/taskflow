@@ -28,9 +28,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
     @Override
-    public RefreshToken createRefreshToken(String email) throws UsernameNotFoundException {
+    public RefreshToken getOrCreateRefreshToken(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found "));
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByUser(user.getId());
+        if(optionalRefreshToken.isPresent())
+            return optionalRefreshToken.get();
         LocalDateTime accessTokenExpirationDateTime = LocalDateTime.now().plusMinutes(this.accessTokenExpirationInMs / 60000); // 60000 ms = 1 minute
         LocalDateTime refreshTokenExpirationDateTime = accessTokenExpirationDateTime.plusMonths(this.refreshTokenExpirationInMonths);
         RefreshToken refreshToken = RefreshToken.builder()
