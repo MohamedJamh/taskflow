@@ -34,7 +34,7 @@ public class UserSeeder {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Value("${seeder.user.password}")
+    @Value("${seeder.super-admin.password}")
     private String userPassword;
     private final User superAdmin = User.builder()
             .firstName("Super")
