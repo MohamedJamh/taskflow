@@ -20,8 +20,8 @@ spring:
           use_sql_comments: true
     datasource:
         url: jdbc:postgresql://localhost:5432/taskflow
-        username: postgres
-        password: root
+        username: idder
+        password: idderjamh
         driver-class-name: org.postgresql.Driver
     liquibase:
       enabled: true
