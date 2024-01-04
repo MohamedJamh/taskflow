@@ -22,7 +22,6 @@ public class AppSeeder {
     @PostConstruct
     public void init() {
         if(Boolean.FALSE.equals(seederEnabled)) return;
-        System.out.println("------------------------------------Seeding database------------------------------------");
         permissionSeeder.seed();
         roleSeeder.seed();
         userSeeder.seed();

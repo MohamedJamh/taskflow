@@ -28,14 +28,14 @@ public class PermissionSeeder {
     public void seed() {
         if(permissionRepository.count() == 0){
             subjects.forEach(subject ->
-                actions.forEach(action -> {
+                actions.forEach(action ->
                     permissionRepository.save(
-                            Permission.builder()
-                                    .subject(subject)
-                                    .action(action)
-                                    .build()
-                    );
-                })
+                        Permission.builder()
+                                .subject(subject)
+                                .action(action)
+                                .build()
+                    )
+                )
             );
         }
     }

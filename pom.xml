@@ -15,6 +15,9 @@
 	<description>taskflow</description>
 	<properties>
 		<java.version>17</java.version>
+		<jacoco.version>0.8.7</jacoco.version>
+		<properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
+		<sonar-maven-plugin.version>.10.0.2594</sonar-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -94,6 +97,11 @@
 			<version>1.4.2.Final</version>
 		</dependency>
 		<!--Mapstruct-->
+		<dependency>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.10.0.2594</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -124,7 +132,6 @@
 			<!--liquibase-->
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -139,7 +146,24 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>${properties-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>src/main/resources/sonarqube.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
