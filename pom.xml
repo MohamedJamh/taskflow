@@ -16,12 +16,8 @@
 	<properties>
 		<java.version>17</java.version>
 		<jacoco.version>0.8.7</jacoco.version>
-		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.junit.reportsPath>${project.basedir}/../target/</sonar.junit.reportsPath>
-		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-		<sonar.tests>${project.basedir}/src/test/</sonar.tests>
-		<sonar.language>java</sonar.language>
+		<properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
+		<sonar-maven-plugin.version>.10.0.2594</sonar-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -102,9 +98,9 @@
 		</dependency>
 		<!--Mapstruct-->
 		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.7</version>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+			<artifactId>sonar-maven-plugin</artifactId>
+			<version>3.10.0.2594</version>
 		</dependency>
 	</dependencies>
 
@@ -136,7 +132,6 @@
 			<!--liquibase-->
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -151,31 +146,23 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
 			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>${properties-maven-plugin.version}</version>
 				<executions>
 					<execution>
-						<id>jacoco-initialize</id>
+						<phase>initialize</phase>
 						<goals>
-							<goal>prepare-agent</goal>
+							<goal>read-project-properties</goal>
 						</goals>
-					</execution>
-					<execution>
-						<id>jacoco-site</id>
-						<phase>package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
+						<configuration>
+							<files>
+								<file>src/main/resources/sonarqube.properties</file>
+							</files>
+						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.9.0.2155</version>
 			</plugin>
 		</plugins>
 	</build>
