@@ -36,7 +36,7 @@ public class User implements UserDetails {
                 name = "role_id"
         )
     )
-    private Set<Role> roles;
+    private transient Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -48,21 +48,19 @@ public class User implements UserDetails {
                 name = "group_id"
         )
     )
-    private Set<PermissionGroup> permissionGroups;
+    private transient Set<PermissionGroup> permissionGroups;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         if(roles != null){
             roles.forEach(
-                role ->{
-                    authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+                role ->
                     role.getPermissions().forEach(
                             permission -> authorities.add(
                                     new SimpleGrantedAuthority(permission.getSubject() + ":" + permission.getAction())
                             )
-                    );
-                }
+                    )
             );
         }
         if(permissionGroups != null){
