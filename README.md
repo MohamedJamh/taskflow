@@ -7,7 +7,7 @@ Welcome to this repository! This project is a comprehensive Spring Boot and spri
 ### 1. Clone the Repository
 
 ```bash
-git clone [Your Repository Link]
+git clone https://github.com/mohamedJamh/taskflow
 cd project-name
 git fetch origin
 git switch authentication
@@ -55,10 +55,9 @@ Download the Docker Compose file from
 
 ## Finally
 
-Copy the Postman collection URL: [Postman Collection Link](https://api.postman.com/collections/25836392-b9d51a4e-105d-42bb-9595-95641b7a2d63?access_key=PMAT-01HKCJ4Q7KJTH8G0FQSZ422M2H)
+Copy the Postman collection URL: [Postman Collection Link](https://www.dropbox.com/scl/fi/c5s3gy0s5dmplii6e9xke/taskflowAuth.json?rlkey=i9n3jns84dgh4pg8zgtzujla0&dl=0)
 - Open Postman.
 - Click on "Import" on the left-hand side.
-- Paste the collection URL and wait for the collection to import.
 - 📝 Note : after importing the collection modifiy the `baseUrl` environment variable to `localhost:8081/api/v1`
 
 Feel free to explore, fork, and adapt this project to suit your specific requirements. If you encounter any issues or have suggestions, please open an issue or contribute.
