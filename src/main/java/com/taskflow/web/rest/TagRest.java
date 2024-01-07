@@ -1,7 +1,7 @@
 package com.taskflow.web.rest;
 
-import com.taskflow.domain.dto.request.TagRequestDto;
-import com.taskflow.domain.dto.response.TagResponseDto;
+import com.taskflow.domain.dto.request.tag.TagRequestDto;
+import com.taskflow.domain.dto.response.tag.TagResponseDto;
 import com.taskflow.domain.mapper.TagMapper;
 import com.taskflow.exception.customexceptions.ValidationException;
 import com.taskflow.service.TagService;

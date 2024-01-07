@@ -1,4 +1,4 @@
-package com.taskflow.domain.dto.request;
+package com.taskflow.domain.dto.request.tag;
 
 import lombok.*;
 
