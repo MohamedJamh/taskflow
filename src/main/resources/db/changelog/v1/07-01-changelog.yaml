@@ -1,0 +1,246 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1704641925173-10
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: group_permission
+            constraintName: fk_groper_on_permission
+  - changeSet:
+      id: 1704641925173-11
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: group_permission
+            constraintName: fk_groper_on_permission_group
+  - changeSet:
+      id: 1704641925173-12
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: role_permission
+            constraintName: fk_rolper_on_permission
+  - changeSet:
+      id: 1704641925173-13
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: role_permission
+            constraintName: fk_rolper_on_role
+  - changeSet:
+      id: 1704641925173-14
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: user_group
+            constraintName: fk_usegro_on_permission_group
+  - changeSet:
+      id: 1704641925173-15
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: user_group
+            constraintName: fk_usegro_on_user
+  - changeSet:
+      id: 1704641925173-16
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: user_role
+            constraintName: fk_user_role_on_role
+  - changeSet:
+      id: 1704641925173-17
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: user_role
+            constraintName: fk_user_role_on_user
+  - changeSet:
+      id: 1704641925173-1
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tags
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: tags
+  - changeSet:
+      id: 1704641925173-2
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tasks
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: start_date
+                  type: DATETIME
+              - column:
+                  name: end_date
+                  type: DATETIME
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: created_by_id
+                  type: BIGINT
+              - column:
+                  name: assigned_by_id
+                  type: BIGINT
+              - column:
+                  name: assigned_to_id
+                  type: BIGINT
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+            tableName: tasks
+  - changeSet:
+      id: 1704641925173-3
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tasks_tags
+                  name: tag_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_tasks_tags
+                  name: task_id
+                  type: BIGINT
+            tableName: tasks_tags
+  - changeSet:
+      id: 1704641925173-4
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_tags_name
+            tableName: tags
+  - changeSet:
+      id: 1704641925173-5
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assigned_by_id
+            baseTableName: tasks
+            constraintName: FK_TASKS_ON_ASSIGNED_BY
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1704641925173-6
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: assigned_to_id
+            baseTableName: tasks
+            constraintName: FK_TASKS_ON_ASSIGNED_TO
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1704641925173-7
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: created_by_id
+            baseTableName: tasks
+            constraintName: FK_TASKS_ON_CREATED_BY
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1704641925173-8
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: tasks_tags
+            constraintName: fk_tastag_on_tag
+            referencedColumnNames: id
+            referencedTableName: tags
+  - changeSet:
+      id: 1704641925173-9
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: task_id
+            baseTableName: tasks_tags
+            constraintName: fk_tastag_on_task
+            referencedColumnNames: id
+            referencedTableName: tasks
+  - changeSet:
+      id: 1704641925173-18
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: group_permission
+  - changeSet:
+      id: 1704641925173-19
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: role_permission
+  - changeSet:
+      id: 1704641925173-20
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: user_group
+  - changeSet:
+      id: 1704641925173-21
+      author: idder
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: user_role
+
