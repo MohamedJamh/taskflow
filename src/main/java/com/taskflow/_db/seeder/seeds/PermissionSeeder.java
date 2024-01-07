@@ -15,8 +15,8 @@ public class PermissionSeeder {
     private final Set<String> subjects = Set.of(
             "user",
             "role",
-            "permission",
-            "task"
+            "task",
+            "tag"
     ); // add your subjects here
     private final Set<String> actions = Set.of(
             "create",
@@ -36,6 +36,12 @@ public class PermissionSeeder {
                                 .build()
                     )
                 )
+            );
+            permissionRepository.save(
+                    Permission.builder()
+                            .subject("all")
+                            .action("manage")
+                            .build()
             );
         }
     }
