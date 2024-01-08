@@ -2,6 +2,7 @@ package com.taskflow.service.impl;
 
 import com.taskflow.domain.dto.response.auth.JwtAuthenticationResponseDto;
 import com.taskflow.domain.entity.User;
+import com.taskflow.domain.mapper.UserMapper;
 import com.taskflow.exception.customexceptions.BadRequestException;
 import com.taskflow.exception.customexceptions.ValidationException;
 import com.taskflow.repository.RoleRepository;
@@ -27,6 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     public AuthenticationServiceImpl(
             UserRepository userRepository,
@@ -34,13 +36,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             AuthenticationManager authenticationManager,
-            RoleRepository roleRepository
+            RoleRepository roleRepository,
+            UserMapper userMapper
     ) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
     @Override
     @Transactional
@@ -59,6 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRepository.save(user);
         return JwtAuthenticationResponseDto.builder()
                 .accessToken(jwtService.generateToken(user))
+                .user(userMapper.toDto(user))
                 .build();
     }
 
@@ -73,6 +78,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new BadCredentialsException("Invalid email or password");
         return JwtAuthenticationResponseDto.builder()
                 .accessToken(jwtService.generateToken(user))
+                .user(userMapper.toDto(optionalUser.get()))
                 .build();
     }
 }
