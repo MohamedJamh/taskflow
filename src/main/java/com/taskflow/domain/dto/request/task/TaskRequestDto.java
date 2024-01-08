@@ -1,35 +1,33 @@
 package com.taskflow.domain.dto.request.task;
 
 import com.taskflow.domain.dto.request.tag.TagRequestDto;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
-
-/**
- * DTO for {@link com.taskflow.domain.entity.Task}
- */
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
-public class TaskRequestDto implements Serializable {
+public class TaskRequestDto {
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
-    private final String name;
+    private String name;
     @NotNull(message = "Description cannot be null")
     @NotBlank(message = "Description cannot be blank")
-    private final String description;
-    @NotNull
-    @FutureOrPresent
-    private final LocalDateTime startDate;
-    @Future
-    private final LocalDateTime endDate;
-    private final Long assignedToId;
-    @NotNull
-    private final Set<TagRequestDto> tags;
+    private String description;
+    @NotNull(message = "Start date cannot be null")
+    @FutureOrPresent(message = "Start date cannot be in the past")
+    private LocalDateTime startDate;
+    @Future(message = "End date cannot be in the past")
+    private LocalDateTime endDate;
+    private UserTaskRequestDto assignedTo;
+    @Valid
+    @NotNull(message = "Tags cannot be null")
+    @Size(min = 1, message = "Tags cannot be empty")
+    private List<TagRequestDto> tags;
 }
