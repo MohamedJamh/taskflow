@@ -15,8 +15,8 @@ public class PermissionSeeder {
     private final Set<String> subjects = Set.of(
             "user",
             "role",
-            "permission",
-            "task"
+            "task",
+            "tag"
     ); // add your subjects here
     private final Set<String> actions = Set.of(
             "create",
@@ -24,6 +24,10 @@ public class PermissionSeeder {
             "update",
             "delete"
     ); // add your actions here
+    private final Set<String> uniquePermissions = Set.of(
+            "all:manage",
+            "assign:task"
+    ); // add your unique permissions here
 
     public void seed() {
         if(permissionRepository.count() == 0){
@@ -35,6 +39,14 @@ public class PermissionSeeder {
                                 .action(action)
                                 .build()
                     )
+                )
+            );
+            uniquePermissions.forEach(permission ->
+                permissionRepository.save(
+                    Permission.builder()
+                        .subject(permission.split(":")[0])
+                        .action(permission.split(":")[1])
+                        .build()
                 )
             );
         }
